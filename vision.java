@@ -16,24 +16,22 @@ import org.opencv.core.Core;
 public class vision
 {
 	public static void main(String[] args)
-	{
-		// load the OpenCV native library
-		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+	{      
+         
+        //checks input is in correct format with right number of entries
+        if(args.length != 2) {
+
+            System.err.println("Invalid Input- Please use format below");
+            System.err.println("java vision <path to image 1>.jpg <path to image 2>.jpg"); 
+        }
+        
+        // load the OpenCV native library
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);  
+
+        Mat image1 = Imgcodecs.imread(args[0]);
+        Mat image2 = Imgcodecs.imread(args[1]);
+
 		
-		// create and print on screen a 3x3 identity matrix
-		System.out.println("Create a 3x3 identity matrix...");
-		Mat mat = Mat.eye(3, 3, CvType.CV_8UC1);
-		System.out.println("mat = " + mat.dump());
-		
-		// prepare to convert a RGB image in gray scale
-		String location = "auckland.jpeg";
-		System.out.print("Convert the image at " + location + " in gray scale... ");
-		// get the jpeg image from the internal resource folder
-		Mat image = Imgcodecs.imread(location);
-		// convert the image in gray scale
-		Imgproc.cvtColor(image, image, Imgproc.COLOR_BGR2GRAY);
-		// write the new image on disk
-		Imgcodecs.imwrite("auckland_gray.jpeg", image);
 		System.out.println("Done!");
 	}
 }
