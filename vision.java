@@ -3,6 +3,7 @@ import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.core.Core;
+import org.opencv.core.Rect;
 
 /**
  * A simple class that demonstrates/tests the usage of the OpenCV library in
@@ -30,6 +31,17 @@ public class vision
 
         Mat image1 = Imgcodecs.imread(args[0]);
         Mat image2 = Imgcodecs.imread(args[1]);
+
+		// crop to roughly the eye
+        Rect crop = new Rect(200, 0, 1000, 1000);
+        image1 = new Mat(image1, crop);
+        image2 = new Mat(image2, crop);
+
+		Imgproc.cvtColor(image1, image1, Imgproc.COLOR_BGR2GRAY);
+        Imgproc.cvtColor(image2, image2, Imgproc.COLOR_BGR2GRAY);
+
+        Imgcodecs.imwrite("cropped1.jpg", image1);
+        Imgcodecs.imwrite("cropped2.jpg", image2);
 
 		
 		System.out.println("Done!");
