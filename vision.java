@@ -6,7 +6,7 @@ import org.opencv.core.Core;
 import org.opencv.core.Core.MinMaxLocResult;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
-
+        
 import org.opencv.core.Rect;
 import org.opencv.core.Size;
 
@@ -36,13 +36,16 @@ public class vision
 
         Mat image1 = Imgcodecs.imread(args[0]);
         Mat image2 = Imgcodecs.imread(args[1]);
-
+    
 		image1 = processImg(image1);
 
-		int value = matching(image1, image1);
+		double match = matching(image1, image1);
 
-		System.out.println("Done!");
+		System.out.println(match);
+
+
 	}
+    
     private static Mat processImg(Mat img){
 
         Mat grad = new Mat();
@@ -95,24 +98,31 @@ public class vision
         Imgcodecs.imwrite("thresholding.jpg", thresh);
 
         //Applies a mask to get rid of the border 
-        //Mat mask = new Mat(thresh.rows(), thresh.cols(), CvType.CV_8U, Scalar.all(0));
+        Point center = new Point(thresh.rows()/2, thresh.cols()/2);
+        Point rect1 = new Point(0, 90);
+        Point rect2 = new Point(thresh.cols(),0);
+        Mat mask = new Mat(thresh.rows(), thresh.cols(), CvType.CV_8U, Scalar.all(0));
+        Imgproc.rectangle(mask, rect1, rect2, new Scalar(255,255,255), -1, 8, 0 );
+        Imgproc.circle(mask, center, thresh.cols()/2, new Scalar(255,255,255), -1, 8, 0 );
+        Mat masked = new Mat();
+        thresh.copyTo(masked, mask);
+        Imgcodecs.imwrite("mask.jpg", masked);
 
         return img;
 
     }
-    private static int matching(Mat img, Mat templ){
+    
+    private static double matching(Mat img, Mat templ){
         Mat output=new Mat();
-        int matchMethod=Imgproc.TM_CCOEFF;
-        
+        int matchMethod=Imgproc.TM_CCOEFF_NORMED;   
         
         Imgproc.matchTemplate(img, templ, output, matchMethod);
-        
-        Imgcodecs.imwrite("match.jpg", output);
-        
-        MinMaxLocResult mmr = Core.minMaxLoc(output);
-        Point matchLoc=mmr.maxLoc;
 
-        return 1;
+        MinMaxLocResult mmr = Core.minMaxLoc(output);
+        double matchValue =mmr.maxVal;  
+
+        return matchValue;
     }
+    
 
 }
