@@ -1,2 +1,2 @@
 # computervision
-https://prod.liveshare.vsengsaas.visualstudio.com/join?71F3EFADCDE3BB05147C85B5BF97B05B5EF4
+https://prod.liveshare.vsengsaas.visualstudio.com/join?500AA87AC5BB9F05624E0A2FDD360786CE3C
