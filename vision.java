@@ -99,14 +99,20 @@ public class vision
 
         //Applies a mask to get rid of the border 
         Point center = new Point(thresh.rows()/2, thresh.cols()/2);
-        Point rect1 = new Point(0, 90);
-        Point rect2 = new Point(thresh.cols(),0);
-        Mat mask = new Mat(thresh.rows(), thresh.cols(), CvType.CV_8U, Scalar.all(0));
-        Imgproc.rectangle(mask, rect1, rect2, new Scalar(255,255,255), -1, 8, 0 );
-        Imgproc.circle(mask, center, thresh.cols()/2, new Scalar(255,255,255), -1, 8, 0 );
+        Point rect1 = new Point(0, 80);
+        Point rect2 = new Point(thresh.cols(),thresh.rows()-40);
+        Mat mask_circ = new Mat(thresh.rows(), thresh.cols(), CvType.CV_8U, Scalar.all(0));
+        Mat mask_rect = new Mat(thresh.rows(), thresh.cols(), CvType.CV_8U, Scalar.all(0));
+
+        Imgproc.circle(mask_circ, center, thresh.cols()/2, new Scalar(255,255,255), -1, 0, 0 );
         Mat masked = new Mat();
-        thresh.copyTo(masked, mask);
-        Imgcodecs.imwrite("mask.jpg", masked);
+        thresh.copyTo(masked, mask_circ);
+
+        Imgproc.rectangle(mask_rect, rect1, rect2, new Scalar(255,255,255), -1);
+        Mat masked_1 = new Mat();
+        masked.copyTo(masked_1, mask_rect);
+
+        Imgcodecs.imwrite("mask.jpg", masked_1);
 
         return img;
 
